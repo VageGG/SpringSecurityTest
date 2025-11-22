@@ -4,8 +4,9 @@ target/
 !**/src/main/**/target/
 !**/src/test/**/target/
 
-# Config .properties
+# Config .properties .yml
 /src/main/resources/*.properties
+/src/main/resources/*.yml
 
 ### STS ###
 .apt_generated
