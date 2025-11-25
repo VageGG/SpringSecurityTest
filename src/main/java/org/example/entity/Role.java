@@ -33,4 +33,13 @@ public class Role implements GrantedAuthority {
     public @Nullable String getAuthority() {
         return name;
     }
+
+    public String getDisplayName() {
+        return name.replace("ROLE_", "");
+    }
+
+    @Override
+    public String toString() {
+        return getDisplayName();
+    }
 }

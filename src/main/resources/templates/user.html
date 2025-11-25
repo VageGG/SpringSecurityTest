@@ -1,11 +1,95 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org" xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
-  <title>Spring Security Example</title>
+    <meta charset="UTF-8">
+    <title>User page</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
-<body>
-<h1>User, welcome spring boot security page!</h1>
+<body class="bg-light">
 
+<!-- Верхняя панель -->
+<nav class="navbar navbar-dark bg-dark px-3">
+    <span class="navbar-brand">
+        <span th:text="${#authentication.name}">user@gmail.com</span>
+        &nbsp;with roles:
+        <span th:each="authority, stat : ${#authentication.authorities}"
+              th:if="${authority.authority != 'FACTOR_PASSWORD'}"
+              th:text="${#strings.replace(authority.authority, 'ROLE_', '')} + (${stat.last} ? '' : ' ')">
+            USER
+        </span>
+    </span>
 
+    <form th:action="@{/logout}" method="post">
+        <button class="btn btn-outline-light" type="submit">Logout</button>
+    </form>
+</nav>
+
+<div class="container-fluid">
+    <div class="row">
+        <!-- Левое меню -->
+        <div class="col-2 px-0 bg-white border-end" style="min-height:100vh;">
+            <ul class="nav flex-column mt-3">
+                <!-- Admin — только для ADMIN -->
+                <li class="nav-item" th:if="${#authorization.expression('hasRole(''ADMIN'')')}">
+                    <a class="nav-link"
+                       th:href="@{/admin}"
+                       th:classappend="${currentPath == '/admin' ? 'active bg-primary text-white' : ''}">
+                        Admin
+                    </a>
+                </li>
+
+                <!-- User — для всех -->
+                <li class="nav-item">
+                    <a class="nav-link"
+                       th:href="@{/user}"
+                       th:classappend="${currentPath == '/user' ? 'active bg-primary text-white' : ''}">
+                        User
+                    </a>
+                </li>
+            </ul>
+        </div>
+
+        <!-- Основная часть -->
+        <div class="col-10">
+            <h2 class="my-4">User information-page</h2>
+
+            <!-- Карточка с информацией о пользователе -->
+            <div class="card">
+                <div class="card-header">
+                    About user
+                </div>
+                <div class="card-body">
+                    <table class="table table-striped">
+                        <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>First Name</th>
+                            <th>Age</th>
+                            <th>Email</th>
+                            <th>Role</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td th:text="${user.id}">3</td>
+                            <td th:text="${user.name}">user</td>
+                            <td th:text="${user.age}">30</td>
+                            <td th:text="${user.email}">user@mail.ru</td>
+                            <td>
+                                <span th:each="role, stat : ${user.roles}"
+                                      th:text="${#strings.replace(role.name, 'ROLE_', '')} + (${stat.last} ? '' : ' ')">
+                                    USER
+                                </span>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
