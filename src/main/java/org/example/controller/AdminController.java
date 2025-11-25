@@ -21,6 +21,7 @@ public class AdminController {
     @GetMapping
     public String adminPage(Model model) {
         model.addAttribute("users", userService.findAll());
+        model.addAttribute("currentPath", "/admin");
         return "admin";
     }
 
@@ -54,18 +55,16 @@ public class AdminController {
         return "redirect:/admin";
     }
 
-    @GetMapping("/edit/{id}")
-    public String editUserForm(@PathVariable Long id, Model model) {
-        userService.findById(id).ifPresent(user -> model.addAttribute("user", user));
-        return "edit-user";
-    }
-
-    @PostMapping("/edit/{id}")
-    public String updateUser(@PathVariable Long id,
-                             @ModelAttribute User user,
+    @PostMapping("/edit")
+    public String updateUser(@ModelAttribute User user,
                              @RequestParam(value = "selectedRoles", required = false) Set<String> selectedRoles) {
 
-        user.setId(id);
+        Long userId = user.getId();
+
+        if (userId == null) {
+            throw new IllegalArgumentException("User ID is required");
+        }
+
 
         // Устанавливаем роли из параметров
         if (selectedRoles != null && !selectedRoles.isEmpty()) {

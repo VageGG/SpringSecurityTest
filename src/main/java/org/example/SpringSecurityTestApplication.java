@@ -48,7 +48,7 @@ public class SpringSecurityTestApplication {
                     .password(passwordEncoder.encode("admin"))
                     .name("admin")
                     .age(25)
-                    .roles(Set.of(roleAdmin))
+                    .roles(Set.of(roleAdmin, roleUser))
                     .build();
             userRepository.save(admin);
 

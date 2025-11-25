@@ -15,6 +15,7 @@ public class UserController {
     @GetMapping
     public String userPage(Authentication authentication, Model model) {
         model.addAttribute("user", authentication.getPrincipal());
+        model.addAttribute("currentPath", "/user");
         return "user";
     }
 }
