@@ -30,6 +30,7 @@ public class WebSecurityConfig {
                 )
                 .formLogin(form -> form
                         .loginPage("/login")
+                        .failureUrl("/login?error")
                         .successHandler(loginSuccessHandler)
                         .permitAll()
                 )

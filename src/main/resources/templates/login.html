@@ -9,6 +9,7 @@
         body { background-color: #f8f9fa; }
         .login-container { max-width: 400px; margin: 100px auto; }
         .card { border: none; border-radius: 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+        .form-label { font-weight: 500; }
     </style>
 </head>
 <body>
@@ -20,21 +21,42 @@
             <form th:action="@{/login}" method="post">
                 <div class="mb-3">
                     <label for="username" class="form-label">Email address</label>
-                    <input type="email" class="form-control" id="username" name="username"
+                    <input type="email" class="form-control"
+                           th:value="${param.username != null ? param.username[0] : ''}"
+                           th:classappend="${param.error != null} ? 'is-invalid'"
+                           id="username" name="username"
                            placeholder="Email address" required autofocus>
+                    <div class="invalid-feedback">
+                        Please check your email and password.
+                    </div>
                 </div>
 
                 <div class="mb-4">
                     <label for="password" class="form-label">Password</label>
-                    <input type="password" class="form-control" id="password" name="password"
+                    <input type="password" class="form-control"
+                           th:classappend="${param.error != null} ? 'is-invalid'"
+                           id="password" name="password"
                            placeholder="Password" required>
+                    <div class="invalid-feedback">
+                        Please check your email and password.
+                    </div>
                 </div>
 
                 <button type="submit" class="btn btn-primary w-100 py-2">Sign in</button>
             </form>
 
-            <div th:if="${param.error}" class="alert alert-danger mt-3">
-                Invalid email or password
+            <div th:if="${param.error}" class="alert alert-danger mt-3 text-center">
+                <small>Invalid email or password</small>
+            </div>
+
+            <div th:if="${param.logout}" class="alert alert-success mt-3 text-center">
+                <small>You have been logged out</small>
+            </div>
+
+            <div class="text-center mt-3">
+                <small class="text-muted">Test accounts:<br>
+                    admin@gmail.com / admin &nbsp;|&nbsp; user@gmail.com / user
+                </small>
             </div>
         </div>
     </div>
